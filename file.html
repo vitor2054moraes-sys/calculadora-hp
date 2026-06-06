@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora HP Completa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculadora">
+        <div class="topo">
+            <h1 id="titulo">Calculadora</h1>
+            <button id="btn-tema" class="btn-tema" onclick="alternarTema()" aria-label="Alternar tema">🌙</button>
+        </div>
+
+        <!-- Alternador de modos -->
+        <div class="modos">
+            <button id="m-comum" class="ativo" onclick="trocarModo('comum')">Comum</button>
+            <button id="m-cientifico" onclick="trocarModo('cientifico')">Científica</button>
+            <button id="m-financeiro" onclick="trocarModo('financeiro')">Financeira</button>
+            <button id="m-taxas" onclick="trocarModo('taxas')">Taxas</button>
+            <button id="m-amortizacao" onclick="trocarModo('amortizacao')">Amortização</button>
+        </div>
+
+        <input type="text" id="visor" readonly placeholder="0">
+
+        <!-- ===== HISTÓRICO ===== -->
+        <div class="historico" id="historico">
+            <div class="historico-header">
+                <span>📋 Histórico (últimos 10)</span>
+                <button class="btn-limpar-hist" onclick="limparHistorico()">Limpar</button>
+            </div>
+            <ul id="lista-historico">
+                <li class="vazio">Nenhum cálculo ainda.</li>
+            </ul>
+        </div>
+
+        <!-- ===== MODO COMUM ===== -->
+        <div class="botoes" id="painel-comum">
+            <button class="func" onclick="limpar()">C</button>
+            <button class="func" onclick="apagar()">⌫</button>
+            <button class="func" onclick="porcentagem()">%</button>
+            <button class="op" onclick="adicionar('/')">÷</button>
+
+            <button onclick="adicionar('7')">7</button>
+            <button onclick="adicionar('8')">8</button>
+            <button onclick="adicionar('9')">9</button>
+            <button class="op" onclick="adicionar('*')">×</button>
+
+            <button onclick="adicionar('4')">4</button>
+            <button onclick="adicionar('5')">5</button>
+            <button onclick="adicionar('6')">6</button>
+            <button class="op" onclick="adicionar('-')">−</button>
+
+            <button onclick="adicionar('1')">1</button>
+            <button onclick="adicionar('2')">2</button>
+            <button onclick="adicionar('3')">3</button>
+            <button class="op" onclick="adicionar('+')">+</button>
+
+            <button onclick="adicionar('0')">0</button>
+            <button onclick="adicionar('.')">.</button>
+            <button class="igual" onclick="calcular()">=</button>
+        </div>
+
+        <!-- ===== MODO CIENTÍFICO ===== -->
+        <div class="botoes cientifico oculto" id="painel-cientifico">
+            <button class="func" onclick="limpar()">C</button>
+            <button class="func" onclick="apagar()">⌫</button>
+            <button class="sci" onclick="adicionar('(')">(</button>
+            <button class="sci" onclick="adicionar(')')">)</button>
+            <button class="op" onclick="adicionar('/')">÷</button>
+
+            <button class="sci" onclick="cientifica('sin')">sin</button>
+            <button class="sci" onclick="cientifica('cos')">cos</button>
+            <button class="sci" onclick="cientifica('tan')">tan</button>
+            <button class="sci" onclick="adicionar('**')">xʸ</button>
+            <button class="op" onclick="adicionar('*')">×</button>
+
+            <button class="sci" onclick="cientifica('sqrt')">√</button>
+            <button class="sci" onclick="cientifica('log')">log</button>
+            <button class="sci" onclick="cientifica('ln')">ln</button>
+            <button class="sci" onclick="adicionar('**2')">x²</button>
+            <button class="op" onclick="adicionar('-')">−</button>
+
+            <button onclick="adicionar('7')">7</button>
+            <button onclick="adicionar('8')">8</button>
+            <button onclick="adicionar('9')">9</button>
+            <button class="sci" onclick="adicionar('Math.PI')">π</button>
+            <button class="op" onclick="adicionar('+')">+</button>
+
+            <button onclick="adicionar('4')">4</button>
+            <button onclick="adicionar('5')">5</button>
+            <button onclick="adicionar('6')">6</button>
+            <button class="sci" onclick="cientifica('fatorial')">x!</button>
+            <button class="sci" onclick="adicionar('Math.E')">e</button>
+
+            <button onclick="adicionar('1')">1</button>
+            <button onclick="adicionar('2')">2</button>
+            <button onclick="adicionar('3')">3</button>
+            <button onclick="adicionar('0')">0</button>
+            <button onclick="adicionar('.')">.</button>
+
+            <button class="igual sci-igual" onclick="calcular()">=</button>
+        </div>
+
+        <!-- ===== MODO FINANCEIRO ===== -->
+        <div class="financeiro oculto" id="painel-financeiro">
+            <div class="campo"><label>n (períodos)</label><input type="number" id="n" placeholder="ex: 12"></div>
+            <div class="campo"><label>i (taxa % por período)</label><input type="number" id="i" placeholder="ex: 2.5"></div>
+            <div class="campo"><label>PV (valor presente)</label><input type="number" id="pv" placeholder="ex: 1000"></div>
+            <div class="campo"><label>PMT (pagamento)</label><input type="number" id="pmt" placeholder="ex: 100"></div>
+            <div class="campo"><label>FV (valor futuro)</label><input type="number" id="fv" placeholder="ex: 0"></div>
+
+            <p class="dica">Preencha os campos conhecidos e clique no que deseja calcular:</p>
+            <div class="botoes-fin">
+                <button onclick="calcularFinanceiro('n')">n</button>
+                <button onclick="calcularFinanceiro('i')">i</button>
+                <button onclick="calcularFinanceiro('pv')">PV</button>
+                <button onclick="calcularFinanceiro('pmt')">PMT</button>
+                <button onclick="calcularFinanceiro('fv')">FV</button>
+                <button class="func" onclick="limparFinanceiro()">Limpar</button>
+            </div>
+            <div id="resultado-fin" class="resultado"></div>
+        </div>
+
+        <!-- ===== MODO CONVERSÃO DE TAXAS ===== -->
+        <div class="painel-extra oculto" id="painel-taxas">
+            <div class="campo"><label>Taxa conhecida (%)</label><input type="number" id="taxa-valor" placeholder="ex: 1"></div>
+            <div class="campo">
+                <label>Período de origem</label>
+                <select id="taxa-de">
+                    <option value="1">Diária</option>
+                    <option value="30" selected>Mensal</option>
+                    <option value="90">Trimestral</option>
+                    <option value="180">Semestral</option>
+                    <option value="360">Anual</option>
+                </select>
+            </div>
+            <div class="campo">
+                <label>Converter para</label>
+                <select id="taxa-para">
+                    <option value="1">Diária</option>
+                    <option value="30">Mensal</option>
+                    <option value="90">Trimestral</option>
+                    <option value="180">Semestral</option>
+                    <option value="360" selected>Anual</option>
+                </select>
+            </div>
+            <button class="btn-acao" onclick="converterTaxa()">Converter</button>
+            <div id="resultado-taxa" class="resultado"></div>
+        </div>
+
+        <!-- ===== MODO AMORTIZAÇÃO ===== -->
+        <div class="painel-extra oculto" id="painel-amortizacao">
+            <div class="campo"><label>Valor financiado (PV)</label><input type="number" id="am-pv" placeholder="ex: 10000"></div>
+            <div class="campo"><label>Taxa % ao período</label><input type="number" id="am-i" placeholder="ex: 1.5"></div>
+            <div class="campo"><label>Número de parcelas (n)</label><input type="number" id="am-n" placeholder="ex: 12"></div>
+            <div class="campo">
+                <label>Sistema</label>
+                <select id="am-sistema">
+                    <option value="price">Price (parcelas fixas)</option>
+                    <option value="sac">SAC (amortização fixa)</option>
+                </select>
+            </div>
+            <button class="btn-acao" onclick="gerarAmortizacao()">Gerar Tabela</button>
+            <div id="resultado-am" class="resultado-tabela"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

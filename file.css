@@ -1,0 +1,296 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* ===== VARIÁVEIS DE TEMA ===== */
+:root {
+    --bg-page: linear-gradient(135deg, #1e1e2f, #2d2d44);
+    --bg-calc: #2a2a3d;
+    --bg-visor: #1a1a28;
+    --bg-btn: #3a3a52;
+    --bg-btn-hover: #4a4a6a;
+    --texto: #fff;
+    --texto-suave: #bbb;
+    --borda: #3a3a52;
+}
+
+body.tema-claro {
+    --bg-page: linear-gradient(135deg, #e0e5ec, #f5f7fa);
+    --bg-calc: #ffffff;
+    --bg-visor: #f0f2f5;
+    --bg-btn: #e4e7eb;
+    --bg-btn-hover: #d4d8de;
+    --texto: #222;
+    --texto-suave: #555;
+    --borda: #d0d4da;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background: var(--bg-page);
+    padding: 30px 15px;
+    transition: background 0.3s;
+}
+
+.calculadora {
+    background: var(--bg-calc);
+    padding: 24px;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    max-width: 100%;
+    transition: background 0.3s;
+}
+
+.topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+h1 {
+    color: var(--texto);
+    font-size: 1.2rem;
+}
+
+.btn-tema {
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    background: var(--bg-btn);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-tema:hover { background: var(--bg-btn-hover); }
+
+.modos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.modos button {
+    flex: 1 1 30%;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: var(--bg-btn);
+    color: var(--texto-suave);
+    cursor: pointer;
+    font-size: 0.78rem;
+    transition: 0.2s;
+}
+
+.modos button.ativo {
+    background: #ff7a00;
+    color: #fff;
+}
+
+#visor {
+    width: 100%;
+    height: 70px;
+    background: var(--bg-visor);
+    border: none;
+    border-radius: 10px;
+    color: var(--texto);
+    font-size: 2rem;
+    text-align: right;
+    padding: 0 15px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    transition: background 0.3s, color 0.3s;
+}
+
+.botoes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.botoes.cientifico {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+button {
+    height: 56px;
+    border: none;
+    border-radius: 10px;
+    background: var(--bg-btn);
+    color: var(--texto);
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+button:hover { background: var(--bg-btn-hover); }
+.op { background: var(--bg-btn-hover); }
+.func { background: #555; color: #fff; }
+.sci { background: #3a5a7a; color: #fff; font-size: 0.95rem; }
+.sci:hover { background: #4a6a8a; }
+.igual { background: #ff7a00; color: #fff; }
+.igual:hover { background: #ff9933; }
+.sci-igual { grid-column: span 5; }
+
+.oculto { display: none; }
+
+/* Campos */
+.campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.campo label { color: var(--texto-suave); font-size: 0.8rem; margin-bottom: 4px; }
+
+.campo input,
+.campo select {
+    height: 42px;
+    background: var(--bg-visor);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    color: var(--texto);
+    padding: 0 12px;
+    font-size: 1rem;
+}
+
+.dica { color: var(--texto-suave); font-size: 0.8rem; margin: 8px 0; }
+
+.botoes-fin {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.botoes-fin button { height: 48px; background: #3a6ea5; color: #fff; }
+.botoes-fin button:hover { background: #4a7eb5; }
+
+.btn-acao {
+    width: 100%;
+    height: 50px;
+    background: #ff7a00;
+    color: #fff;
+    font-size: 1rem;
+    margin-top: 6px;
+}
+.btn-acao:hover { background: #ff9933; }
+
+.resultado {
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--bg-visor);
+    border-radius: 10px;
+    color: #4caf50;
+    font-size: 1.05rem;
+    text-align: center;
+    min-height: 20px;
+    line-height: 1.5;
+}
+
+/* Tabela de amortização */
+.resultado-tabela {
+    margin-top: 14px;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.resultado-tabela table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    color: var(--texto);
+}
+
+.resultado-tabela th,
+.resultado-tabela td {
+    padding: 6px 4px;
+    text-align: right;
+    border-bottom: 1px solid var(--borda);
+}
+
+.resultado-tabela th {
+    background: #3a6ea5;
+    color: #fff;
+    position: sticky;
+    top: 0;
+}
+
+.resultado-tabela td:first-child,
+.resultado-tabela th:first-child { text-align: center; }
+
+.resultado-tabela .total {
+    font-weight: bold;
+    color: #4caf50;
+    background: var(--bg-visor);
+}
+
+/* ===== HISTÓRICO ===== */
+.historico {
+    background: var(--bg-visor);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid var(--borda);
+    transition: background 0.3s;
+}
+
+.historico-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    color: var(--texto-suave);
+    font-size: 0.82rem;
+}
+
+.btn-limpar-hist {
+    height: auto;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    background: #663333;
+    color: #fff;
+    border-radius: 6px;
+}
+.btn-limpar-hist:hover { background: #884444; }
+
+#lista-historico {
+    list-style: none;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+#lista-historico li {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--borda);
+    color: var(--texto);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.15s;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+#lista-historico li:hover { background: var(--bg-btn); }
+#lista-historico li:last-child { border-bottom: none; }
+#lista-historico li .expr { color: var(--texto-suave); }
+#lista-historico li .res { color: #4caf50; font-weight: bold; white-space: nowrap; }
+
+#lista-historico li.vazio {
+    color: #888;
+    cursor: default;
+    justify-content: center;
+    font-style: italic;
+}
+#lista-historico li.vazio:hover { background: none; }
+
+.historico.oculto { display: none; }
