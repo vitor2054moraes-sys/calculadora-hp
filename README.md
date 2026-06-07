@@ -1,7 +1,7 @@
 🧮 Calculadora HP Completa
 Uma calculadora web completa com 5 modos de operação, inspirada na clássica HP 12C.
 Feita com HTML, CSS e JavaScript puro — sem frameworks ou dependências.
-🔗 Demo ao vivo: https://VitorSM.github.io/calculadora-hp/
+🔗 Demo ao vivo: https://vitor2054moraes-sys.github.io/calculadora-hp/
 ---
 ✨ Funcionalidades
 Modo	Descrição
