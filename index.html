@@ -2,170 +2,171 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora HP Completa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Segurança: só arquivos deste site (nada de script embutido ou de fora). -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+    <meta name="theme-color" content="#16161f">
+    <title>Cifra — calculadora comum, científica e financeira</title>
+    <link rel="icon" href="icone.svg" type="image/svg+xml">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="calculadora">
+    <main class="calculadora">
         <div class="topo">
-            <h1 id="titulo">Calculadora</h1>
-            <button id="btn-tema" class="btn-tema" onclick="alternarTema()" aria-label="Alternar tema">🌙</button>
-        </div>
-
-        <!-- Alternador de modos -->
-        <div class="modos">
-            <button id="m-comum" class="ativo" onclick="trocarModo('comum')">Comum</button>
-            <button id="m-cientifico" onclick="trocarModo('cientifico')">Científica</button>
-            <button id="m-financeiro" onclick="trocarModo('financeiro')">Financeira</button>
-            <button id="m-taxas" onclick="trocarModo('taxas')">Taxas</button>
-            <button id="m-amortizacao" onclick="trocarModo('amortizacao')">Amortização</button>
-        </div>
-
-        <input type="text" id="visor" readonly placeholder="0">
-
-        <!-- ===== HISTÓRICO ===== -->
-        <div class="historico" id="historico">
-            <div class="historico-header">
-                <span>📋 Histórico (últimos 10)</span>
-                <button class="btn-limpar-hist" onclick="limparHistorico()">Limpar</button>
+            <div>
+                <p class="marca">Cifra</p>
+                <h1 id="titulo">Calculadora</h1>
             </div>
-            <ul id="lista-historico">
-                <li class="vazio">Nenhum cálculo ainda.</li>
-            </ul>
+            <button type="button" id="btn-tema" class="btn-tema" aria-label="Tema claro">Claro</button>
+        </div>
+
+        <!-- Modos -->
+        <nav class="modos" role="tablist" aria-label="Modos">
+            <button type="button" role="tab" data-modo="comum" aria-selected="true">Comum</button>
+            <button type="button" role="tab" data-modo="cientifico" aria-selected="false">Científica</button>
+            <button type="button" role="tab" data-modo="financeiro" aria-selected="false">Financeira</button>
+            <button type="button" role="tab" data-modo="taxas" aria-selected="false">Taxas</button>
+            <button type="button" role="tab" data-modo="amortizacao" aria-selected="false">Amortização</button>
+        </nav>
+
+        <!-- Visor (modos Comum e Científica) -->
+        <div class="visor" id="area-visor">
+            <p class="conta" id="conta" aria-hidden="true"></p>
+            <output id="visor" aria-live="polite">0</output>
         </div>
 
         <!-- ===== MODO COMUM ===== -->
         <div class="botoes" id="painel-comum">
-            <button class="func" onclick="limpar()">C</button>
-            <button class="func" onclick="apagar()">⌫</button>
-            <button class="func" onclick="porcentagem()">%</button>
-            <button class="op" onclick="adicionar('/')">÷</button>
-
-            <button onclick="adicionar('7')">7</button>
-            <button onclick="adicionar('8')">8</button>
-            <button onclick="adicionar('9')">9</button>
-            <button class="op" onclick="adicionar('*')">×</button>
-
-            <button onclick="adicionar('4')">4</button>
-            <button onclick="adicionar('5')">5</button>
-            <button onclick="adicionar('6')">6</button>
-            <button class="op" onclick="adicionar('-')">−</button>
-
-            <button onclick="adicionar('1')">1</button>
-            <button onclick="adicionar('2')">2</button>
-            <button onclick="adicionar('3')">3</button>
-            <button class="op" onclick="adicionar('+')">+</button>
-
-            <button onclick="adicionar('0')">0</button>
-            <button onclick="adicionar('.')">.</button>
-            <button class="igual" onclick="calcular()">=</button>
+            <button type="button" class="func" data-acao="limpar" aria-label="Limpar">C</button>
+            <button type="button" class="func" data-acao="apagar" aria-label="Apagar">⌫</button>
+            <button type="button" class="func" data-acao="porcentagem" aria-label="Porcentagem">%</button>
+            <button type="button" class="op" data-tecla="÷" aria-label="Dividir">÷</button>
+            <button type="button" data-tecla="7">7</button>
+            <button type="button" data-tecla="8">8</button>
+            <button type="button" data-tecla="9">9</button>
+            <button type="button" class="op" data-tecla="×" aria-label="Multiplicar">×</button>
+            <button type="button" data-tecla="4">4</button>
+            <button type="button" data-tecla="5">5</button>
+            <button type="button" data-tecla="6">6</button>
+            <button type="button" class="op" data-tecla="−" aria-label="Menos">−</button>
+            <button type="button" data-tecla="1">1</button>
+            <button type="button" data-tecla="2">2</button>
+            <button type="button" data-tecla="3">3</button>
+            <button type="button" class="op" data-tecla="+" aria-label="Mais">+</button>
+            <button type="button" data-tecla="0">0</button>
+            <button type="button" data-tecla="." aria-label="Vírgula decimal">.</button>
+            <button type="button" class="igual largo" data-acao="calcular" aria-label="Igual">=</button>
         </div>
 
         <!-- ===== MODO CIENTÍFICO ===== -->
         <div class="botoes cientifico oculto" id="painel-cientifico">
-            <button class="func" onclick="limpar()">C</button>
-            <button class="func" onclick="apagar()">⌫</button>
-            <button class="sci" onclick="adicionar('(')">(</button>
-            <button class="sci" onclick="adicionar(')')">)</button>
-            <button class="op" onclick="adicionar('/')">÷</button>
-
-            <button class="sci" onclick="cientifica('sin')">sin</button>
-            <button class="sci" onclick="cientifica('cos')">cos</button>
-            <button class="sci" onclick="cientifica('tan')">tan</button>
-            <button class="sci" onclick="adicionar('**')">xʸ</button>
-            <button class="op" onclick="adicionar('*')">×</button>
-
-            <button class="sci" onclick="cientifica('sqrt')">√</button>
-            <button class="sci" onclick="cientifica('log')">log</button>
-            <button class="sci" onclick="cientifica('ln')">ln</button>
-            <button class="sci" onclick="adicionar('**2')">x²</button>
-            <button class="op" onclick="adicionar('-')">−</button>
-
-            <button onclick="adicionar('7')">7</button>
-            <button onclick="adicionar('8')">8</button>
-            <button onclick="adicionar('9')">9</button>
-            <button class="sci" onclick="adicionar('Math.PI')">π</button>
-            <button class="op" onclick="adicionar('+')">+</button>
-
-            <button onclick="adicionar('4')">4</button>
-            <button onclick="adicionar('5')">5</button>
-            <button onclick="adicionar('6')">6</button>
-            <button class="sci" onclick="cientifica('fatorial')">x!</button>
-            <button class="sci" onclick="adicionar('Math.E')">e</button>
-
-            <button onclick="adicionar('1')">1</button>
-            <button onclick="adicionar('2')">2</button>
-            <button onclick="adicionar('3')">3</button>
-            <button onclick="adicionar('0')">0</button>
-            <button onclick="adicionar('.')">.</button>
-
-            <button class="igual sci-igual" onclick="calcular()">=</button>
+            <button type="button" class="func" data-acao="limpar" aria-label="Limpar">C</button>
+            <button type="button" class="func" data-acao="apagar" aria-label="Apagar">⌫</button>
+            <button type="button" class="sci" data-tecla="(">(</button>
+            <button type="button" class="sci" data-tecla=")">)</button>
+            <button type="button" class="op" data-tecla="÷" aria-label="Dividir">÷</button>
+            <button type="button" class="sci" data-funcao="sin">sin</button>
+            <button type="button" class="sci" data-funcao="cos">cos</button>
+            <button type="button" class="sci" data-funcao="tan">tan</button>
+            <button type="button" class="sci" data-tecla="^" aria-label="Potência">xʸ</button>
+            <button type="button" class="op" data-tecla="×" aria-label="Multiplicar">×</button>
+            <button type="button" class="sci" data-funcao="sqrt" aria-label="Raiz quadrada">√</button>
+            <button type="button" class="sci" data-funcao="log">log</button>
+            <button type="button" class="sci" data-funcao="ln">ln</button>
+            <button type="button" class="sci" data-tecla="^2" aria-label="Ao quadrado">x²</button>
+            <button type="button" class="op" data-tecla="−" aria-label="Menos">−</button>
+            <button type="button" data-tecla="7">7</button>
+            <button type="button" data-tecla="8">8</button>
+            <button type="button" data-tecla="9">9</button>
+            <button type="button" class="sci" data-tecla="π" aria-label="Pi">π</button>
+            <button type="button" class="op" data-tecla="+" aria-label="Mais">+</button>
+            <button type="button" data-tecla="4">4</button>
+            <button type="button" data-tecla="5">5</button>
+            <button type="button" data-tecla="6">6</button>
+            <button type="button" class="sci" data-funcao="fatorial" aria-label="Fatorial">x!</button>
+            <button type="button" class="sci" data-tecla="e" aria-label="Número de Euler">e</button>
+            <button type="button" data-tecla="1">1</button>
+            <button type="button" data-tecla="2">2</button>
+            <button type="button" data-tecla="3">3</button>
+            <button type="button" data-tecla="0">0</button>
+            <button type="button" data-tecla="." aria-label="Vírgula decimal">.</button>
+            <button type="button" class="igual sci-igual" data-acao="calcular" aria-label="Igual">=</button>
         </div>
 
-        <!-- ===== MODO FINANCEIRO ===== -->
-        <div class="financeiro oculto" id="painel-financeiro">
-            <div class="campo"><label>n (períodos)</label><input type="number" id="n" placeholder="ex: 12"></div>
-            <div class="campo"><label>i (taxa % por período)</label><input type="number" id="i" placeholder="ex: 2.5"></div>
-            <div class="campo"><label>PV (valor presente)</label><input type="number" id="pv" placeholder="ex: 1000"></div>
-            <div class="campo"><label>PMT (pagamento)</label><input type="number" id="pmt" placeholder="ex: 100"></div>
-            <div class="campo"><label>FV (valor futuro)</label><input type="number" id="fv" placeholder="ex: 0"></div>
+        <!-- ===== HISTÓRICO (Comum e Científica) ===== -->
+        <details class="historico" id="historico">
+            <summary>Histórico (últimos 10)</summary>
+            <ul id="lista-historico"></ul>
+            <button type="button" class="btn-limpar-hist" id="limpar-historico">Limpar histórico</button>
+        </details>
 
-            <p class="dica">Preencha os campos conhecidos e clique no que deseja calcular:</p>
-            <div class="botoes-fin">
-                <button onclick="calcularFinanceiro('n')">n</button>
-                <button onclick="calcularFinanceiro('i')">i</button>
-                <button onclick="calcularFinanceiro('pv')">PV</button>
-                <button onclick="calcularFinanceiro('pmt')">PMT</button>
-                <button onclick="calcularFinanceiro('fv')">FV</button>
-                <button class="func" onclick="limparFinanceiro()">Limpar</button>
+        <!-- ===== MODO FINANCEIRO ===== -->
+        <div class="painel-extra oculto" id="painel-financeiro">
+            <p class="dica">Como na HP 12C: dinheiro que sai do seu bolso vai com sinal de menos. Preencha o que sabe e toque no que
+                quer calcular.</p>
+            <div class="grade-campos">
+                <label class="campo">n (períodos)<input type="number" id="n" placeholder="ex.: 12" inputmode="decimal"></label>
+                <label class="campo">i (taxa % por período)<input type="number" id="i" placeholder="ex.: 2.5" inputmode="decimal"></label>
+                <label class="campo">PV (valor presente)<input type="number" id="pv" placeholder="ex.: 1000" inputmode="decimal"></label>
+                <label class="campo">PMT (parcela)<input type="number" id="pmt" placeholder="ex.: -100" inputmode="decimal"></label>
+                <label class="campo">FV (valor futuro)<input type="number" id="fv" placeholder="ex.: 0" inputmode="decimal"></label>
             </div>
-            <div id="resultado-fin" class="resultado"></div>
+            <div class="botoes-fin">
+                <button type="button" data-alvo="n">n</button>
+                <button type="button" data-alvo="i">i</button>
+                <button type="button" data-alvo="pv">PV</button>
+                <button type="button" data-alvo="pmt">PMT</button>
+                <button type="button" data-alvo="fv">FV</button>
+                <button type="button" class="func" id="limpar-financeiro">Limpar</button>
+            </div>
+            <p id="resultado-fin" class="resultado" aria-live="polite"></p>
         </div>
 
         <!-- ===== MODO CONVERSÃO DE TAXAS ===== -->
         <div class="painel-extra oculto" id="painel-taxas">
-            <div class="campo"><label>Taxa conhecida (%)</label><input type="number" id="taxa-valor" placeholder="ex: 1"></div>
-            <div class="campo">
-                <label>Período de origem</label>
-                <select id="taxa-de">
-                    <option value="1">Diária</option>
-                    <option value="30" selected>Mensal</option>
-                    <option value="90">Trimestral</option>
-                    <option value="180">Semestral</option>
-                    <option value="360">Anual</option>
-                </select>
+            <label class="campo">Taxa conhecida (%)<input type="number" id="taxa-valor" placeholder="ex.: 1" inputmode="decimal"></label>
+            <div class="grade-campos">
+                <label class="campo">Período de origem
+                    <select id="taxa-de">
+                        <option value="1">Diária</option>
+                        <option value="30" selected>Mensal</option>
+                        <option value="90">Trimestral</option>
+                        <option value="180">Semestral</option>
+                        <option value="360">Anual</option>
+                    </select>
+                </label>
+                <label class="campo">Converter para
+                    <select id="taxa-para">
+                        <option value="1">Diária</option>
+                        <option value="30">Mensal</option>
+                        <option value="90">Trimestral</option>
+                        <option value="180">Semestral</option>
+                        <option value="360" selected>Anual</option>
+                    </select>
+                </label>
             </div>
-            <div class="campo">
-                <label>Converter para</label>
-                <select id="taxa-para">
-                    <option value="1">Diária</option>
-                    <option value="30">Mensal</option>
-                    <option value="90">Trimestral</option>
-                    <option value="180">Semestral</option>
-                    <option value="360" selected>Anual</option>
-                </select>
-            </div>
-            <button class="btn-acao" onclick="converterTaxa()">Converter</button>
-            <div id="resultado-taxa" class="resultado"></div>
+            <button type="button" class="btn-acao" id="converter">Converter</button>
+            <p id="resultado-taxa" class="resultado" aria-live="polite"></p>
+            <p class="dica">Juros compostos, ano comercial de 360 dias (como no mercado).</p>
         </div>
 
         <!-- ===== MODO AMORTIZAÇÃO ===== -->
         <div class="painel-extra oculto" id="painel-amortizacao">
-            <div class="campo"><label>Valor financiado (PV)</label><input type="number" id="am-pv" placeholder="ex: 10000"></div>
-            <div class="campo"><label>Taxa % ao período</label><input type="number" id="am-i" placeholder="ex: 1.5"></div>
-            <div class="campo"><label>Número de parcelas (n)</label><input type="number" id="am-n" placeholder="ex: 12"></div>
-            <div class="campo">
-                <label>Sistema</label>
-                <select id="am-sistema">
-                    <option value="price">Price (parcelas fixas)</option>
-                    <option value="sac">SAC (amortização fixa)</option>
-                </select>
+            <div class="grade-campos">
+                <label class="campo">Valor financiado (PV)<input type="number" id="am-pv" placeholder="ex.: 10000" inputmode="decimal"></label>
+                <label class="campo">Taxa % ao período<input type="number" id="am-i" placeholder="ex.: 1.5" inputmode="decimal"></label>
+                <label class="campo">Nº de parcelas (até 600)<input type="number" id="am-n" placeholder="ex.: 12" inputmode="numeric"></label>
+                <label class="campo">Sistema
+                    <select id="am-sistema">
+                        <option value="price">Price (parcelas fixas)</option>
+                        <option value="sac">SAC (amortização fixa)</option>
+                    </select>
+                </label>
             </div>
-            <button class="btn-acao" onclick="gerarAmortizacao()">Gerar Tabela</button>
+            <button type="button" class="btn-acao" id="gerar-tabela">Gerar tabela</button>
             <div id="resultado-am" class="resultado-tabela"></div>
         </div>
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
